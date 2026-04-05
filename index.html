@@ -3,15 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>青行·个人志 | 二次元个人博客</title>
+    <title>残月羽喵·个人志 | 自设博客</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="test.css">
+    <link rel="stylesheet" href="temp1.css">
 </head>
 
 <body>
+  <!-- 这个是星空的容器 -->
+<div id="star-background">
+  <div id="star-flicker-layer">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>
+  </div>
+</div>
+
+<div id="loader-overlay">
+    <div class="loader-content">
+        <div class="spinner-wrapper">
+            <div class="spinner"></div>
+            <div class="spinner-inner"></div>
+        </div>
+        <div id="enter-text">点击 启程</div>
+    </div>
+</div>
 
 <header class="flex justify-between items-center p-6 max-w-7xl mx-auto w-full">
-    <h1 class="text-xl font-bold">青行·个人志</h1>
+    </header>
+
+<header class="flex justify-between items-center p-6 max-w-7xl mx-auto w-full">
+    <h1 class="text-xl font-bold">残月羽·自设收藏</h1>
     
     <button class="theme-toggle" id="theme-toggle-btn" role="switch" aria-checked="false" aria-label="切换到暗色主题">
         <div class="theme-toggle__container">
@@ -92,34 +113,79 @@
 
 <section class="py-16 max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center px-6">
     <div>
-        <h2 class="text-4xl font-bold mb-4">青行（Aoyuki）</h2>
-        <p class="mb-4">行走江湖的旅人 · 游离于现实与虚构之间</p>
-        <p class="opacity-70 italic">“一面入世为工，一面行走于影。”</p>
+        <h2 id="hero-title" class="text-4xl font-bold mb-4"></h2>
+        <p id="hero-tagline" class="mb-4"></p>
+        <p id="hero-motto" class="opacity-70 italic"></p>
     </div>
     <div>
-        <img src="https://picsum.photos/400/500" class="rounded-2xl img-hover shadow-lg w-full object-cover h-[500px]" />
+      <!-- 封面图 -->
+        <img id="main-photo" src="" class="rounded-2xl ... shadow-lg" />
     </div>
 </section>
-
-<section class="max-w-6xl mx-auto px-6 pb-10 grid grid-cols-2 md:grid-cols-4 gap-4">
-    <img src="https://picsum.photos/300?1" class="rounded-xl img-hover w-full aspect-square object-cover" />
-    <img src="https://picsum.photos/300?2" class="rounded-xl img-hover w-full aspect-square object-cover" />
-    <img src="https://picsum.photos/300?3" class="rounded-xl img-hover w-full aspect-square object-cover" />
-    <img src="https://picsum.photos/300?4" class="rounded-xl img-hover w-full aspect-square object-cover" />
+<!-- 图片1处 -->
+<section class="max-w-6xl mx-auto px-6 pb-10 grid grid-cols-2 md:grid-cols-4 gap-4">  
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/02/24/18/lmaxv6WJmA-12V6HBsekctK89jeH_2746.jpg!sq300.2x" class="rounded-xl img-hover w-full aspect-square object-cover" />
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/03/23/11/FrQ3szg89VxgGvfgpfObMOG5Ukk0_3907.jpg!w600.2x" class="rounded-xl img-hover w-full aspect-square object-cover" />
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/01/30/18/FlcOpPCkRWC2EWfiKI9Co0BfCLxZ_2234.jpg" class="rounded-xl img-hover w-full aspect-square object-cover" />
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/01/17/01/lh9maUAM4brK-NHEDjgnnaK0Z6fQ_0535.png!w600.2x" class="rounded-xl img-hover w-full aspect-square object-cover" />
 </section>
-
+<!-- 文本处 -->
 <section class="max-w-4xl mx-auto grid gap-6 px-6 py-10">
-    <div class="card">
-        <h3 class="text-xl font-bold mb-2">关于我</h3>
-        <p>一个研究机器人与嵌入式的工程生，同时也是虚构世界中的行者。</p>
+  <div class="card">
+    <h3 id="card-about-title-1" class="text-xl font-bold mb-2"></h3>
+    <p id="card-about-desc-1"></p>
+  </div>
+  <div class="card">
+    <h3 id="card-about-title-2" class="text-xl font-bold mb-2"></h3>
+    <p id="card-about-desc-2"></p>
+  </div>
+  <div class="card">
+    <h3 id="card-about-title-3" class="text-xl font-bold mb-2"></h3>
+    <p id="card-about-desc-3"></p>
+  </div>
+  <div class="card">
+    <h3 id="card-about-title-4" class="text-xl font-bold mb-2"></h3>
+    <p id="card-about-desc-4"></p>
+  </div>
+</section>
+<section class="max-w-7xl mx-auto px-6 py-20">
+  <div class="mb-12 border-l-4 border-current pl-4">
+    <h2 class="text-3xl font-bold italic tracking-widest">ARTWORKS / 美术集</h2>
+    <p class="opacity-50 text-sm mt-2">点击图片可查看原图</p>
+  </div>
+  <div id="light-photo-pool" class="gallery-grid">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/02/27/20/FthheIAm32p8FWAgEYNIxO2b59IN_2314.jpg!sq300.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/02/26/10/lidHlCqjQD8FZniWwywIqL8U8laZ_4252.jpg!w600.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/02/26/10/FvdzfcG58-mOt4_EnGuBO7YEty_8_0357.jpg!sq300.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/03/02/12/Fv-IdNfXvtf8aealef5YpXPuLp9J_3450.jpg!sq300.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/03/02/12/FoAIAGE3VsL3JqNIS7-5fg8t0Amk_3450.jpg!sq300.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/03/02/12/Fow_RAv4K9CXUBsH22LRRGorkENx_3156.jpg!sq300.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/02/24/18/Fp1ZYQ0DaWE33kUUDGv_t_hrDv41_2747.png!sq300.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/02/24/18/lmaxv6WJmA-12V6HBsekctK89jeH_2746.jpg!sq300.2x" class="rounded-xl ">
     </div>
-    <div class="card">
-        <h3 class="text-xl font-bold mb-2">项目</h3>
-        <p>SLAM小车 / 视觉机械臂 / STM32控制系统</p>
-    </div>
-    <div class="card">
-        <h3 class="text-xl font-bold mb-2">随笔</h3>
-        <p>记录学习、思考与江湖见闻。</p>
+
+  <div id="dark-photo-pool" class="gallery-grid hidden">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/01/06/22/FhRp0xWaxFYRDtLGGtlZA-FdV-hi_3253.jpg!w600.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/03/04/12/Fk4-WTFpNKo71NjG2eagupUbffMu_1629.jpg" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/01/06/22/Fg0WArRkEcEBR6UcKqeClNOOn2T7_2123.jpg!sq300.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/01/06/22/Fmnkv-zciSqFSCNbr5uRhKLJSu-G_2121.jpg!sq300.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/01/06/22/FvLjoV2wZzrarqHt-2LhOgChbWOU_2122.jpg!sq300.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/01/06/22/lpgv3hK5-3yvn5dIbeCnKjvFRTvs_5529.png!sq300.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/01/20/22/FpKE7jRNcjzyVJk7cqHVW0XMqDJR_5751.png!sq300.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/01/20/23/FpWjEw-KAgetH64CNIB3JVxtdPpT_0817.png!sq300.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/01/06/22/FgTNLM-X8cgqF2g3klGNiLgdYDPQ_5825.png!sq300.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/01/06/23/FrCzrtaWD5Q5XbplmaFP32tbfZbt_1406.jpg!sq300.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/01/06/23/FjjtaWfJxOGF3BeM_6BWqrB7eKcN_1548.jpg!sq300.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/01/07/11/FnySDEYyHuJ4YFEAFqoS9RLhuUc5_1822.png!sq300.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/02/09/08/FiguOyG1iKNw3qWSV610FU6vAk7f_5458.jpg!sq300.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/01/06/23/FvoT2072Y6ozg9FAekybToaP2ENa_0555.jpg!sq300.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/01/06/23/FkzLrHfI18DMxOmJf7tvLt_q935X_0157.jpg!sq300.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/01/06/23/Fpmzcv1b2tA1gV8yac-38RZz3J-l_0304.jpg!sq300.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/01/06/23/FqCMUHPLurpUHrhqP1himEbXgFcv_2035.jpg!sq300.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/02/23/22/FhuR1GxhNRu76aTh9XDUfXikhlTF_5049.png!sq300.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/03/11/00/ltsKz2Sj-T9kCGhGfkXcmw4sUR6g_1921.png!sq300.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/03/04/12/Fk4-WTFpNKo71NjG2eagupUbffMu_1629.jpg!sq300.2x" class="rounded-xl ">
+    <img src="https://image-assets.mihuashi.com/permanent/1726626%7C-2026/03/04/21/FkHpdgZurkY90FncgmyThy5PgESe_1621.jpg!sq300.2x" class="rounded-xl ">
     </div>
 </section>
 
@@ -128,5 +194,10 @@
 </footer>
 
 <script type="module" src="test.js"></script>
+
+<div id="image-viewer" class="hidden">
+    <span class="close-viewer">&times;</span>
+    <img class="viewer-content" id="full-image">
+</div>
 </body>
 </html>
