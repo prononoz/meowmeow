@@ -10,14 +10,13 @@
 :root {
   /* 丝滑的过渡时间和曲线 */
   --transition-standard: 0.3s ease; 
-  
+  --transition-theme: 1.0s ease-in-out; /* ease-in-out 让色彩转换更柔和 */
   /* 阳面 (亮色) 主题变量 */
   --bg-color: #e6f4f1;
   --bg-gradient: linear-gradient(135deg, #e6f4f1, #d8efe3);
   --text-color: #1f3d3a;
   --card-bg: rgba(255, 255, 255, 0.6);
   --card-border: rgba(100, 150, 130, 0.3);
-  --font-main: "KaiTi", "STKaiti", serif;
 
   /* 按钮专用尺寸变量 (基于 em，可随 font-size 缩放) */
   --base-scale: 12px; /* 这里控制按钮整体大小 */
@@ -54,8 +53,27 @@
   --player-accent: #667eea;
   --volume-bar-width: 6em;  
   --volume-icon-size: 1.2em;
+
+  /* ============================================================
+     星空背景控制变量
+     ============================================================ */
+  --star-color-light: 102, 126, 234; /* 白天模式星星颜色 (RGB: 浅棕或紫色) */
+  --star-color-dark: 255, 255, 255;  /* 黑夜模式星星颜色 (纯白) */
+  --current-star-rgb: 180, 140, 100;
+  --star-move-y: 2000px;
+  --star-speed-small: 100s;
+  --star-speed-medium: 150s;
+  --star-speed-big: 200s;
+
+  /* 默认背景色 (白天) */
+  --star-bg-gradient: radial-gradient(ellipse at bottom, #e6f4f1 0%, #d8efe3 100%);
+  /* 字体 */
+  --font-main: "KaiTi", "STKaiti", serif;
 }
 
+html{
+  transition: background-color var(--transition-theme), color var(--transition-theme);
+}
 /* ============================================================
    2. 阴面 (暗色模式) 变量覆盖
    ============================================================ */
@@ -65,7 +83,12 @@ html.dark {
   --text-color: #e5e5e5;
   --card-bg: #111;
   --card-border: #444;
-  --font-main: "Noto Serif SC", serif;
+  --star-bg-gradient: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+  --star-move-y: -2000px;
+  --current-star-rgb: 255, 255, 255; 
+}
+.font-apply-dark {
+  --font-main: "Noto Serif SC", serif; /* 黑夜字体 */
 }
 
 /* ============================================================
@@ -78,6 +101,16 @@ body {
   font-family: var(--font-main);
   transition: background var(--transition-standard), color var(--transition-standard);
   min-height: 100vh;
+  background: var(--bg-gradient);
+  color: var(--text-color);
+  
+  /* 【核心修改】将过渡时间改为 var(--transition-theme) */
+  transition: background var(--transition-theme), color var(--transition-theme);
+  
+  background-attachment: fixed;
+  font-family: var(--font-main);
+  min-height: 100vh;
+
 }
 
 .card {
@@ -109,7 +142,6 @@ body {
   padding: 0; /* 移除默认 padding */
 }
 
-/* 舞台容器 */
 .theme-toggle__container {
   width: var(--toggle-width);
   height: var(--toggle-height);
@@ -125,7 +157,6 @@ html.dark .theme-toggle__container {
   background-color: var(--bg-toggle-dark);
 }
 
-/* 按钮内部上边缘的内阴影，增加深度感 */
 .theme-toggle__container::after {
   content: "";
   position: absolute;
@@ -134,8 +165,6 @@ html.dark .theme-toggle__container {
   border-radius: 100em;
   pointer-events: none;
 }
-
-/* 主角：太阳 (也是月亮的参照物) */
 .theme-toggle__sun {
   width: var(--sun-diameter);
   height: var(--sun-diameter);
@@ -143,11 +172,8 @@ html.dark .theme-toggle__container {
   border-radius: 50%;
   position: absolute;
   top: var(--sun-offset);
-  /* 白天位置 */
   transform: translateX(var(--sun-offset)); 
   transition: transform var(--transition-standard);
-  
-  /* 多层阴影：外发光 + 内部立体感 */
   box-shadow: 0.05em 0.125em 0.125em var(--shadow-primary),
     0em 0.05em 0.125em var(--shadow-primary),
     0.05em 0.05em 0.05em 0em rgba(254, 255, 239, 0.61) inset,
@@ -157,8 +183,6 @@ html.dark .theme-toggle__container {
     0 0 0 1.875em var(--halo-color);
     overflow: hidden;
 }
-
-/* 旋转花朵容器 */
 .sun-decoration {
   position: absolute;
   top: 50%;
@@ -169,8 +193,6 @@ html.dark .theme-toggle__container {
   height: 100px;
   pointer-events: none;
   z-index: 1;
-  
-  /* 使用变量控制旋转速度 */
   animation: lowSpeedSpin var(--flower-spin-speed) linear infinite;
   transition: opacity var(--transition-standard);
 }
@@ -211,8 +233,6 @@ html.dark .sun-decoration {
   opacity: var(--flower-opacity);
   background: radial-gradient(circle at -10px -15px, var(--flower-color-main) 50%, var(--flower-color-main) 50%);
 }
-
-/* 动画帧也需要同步变量，否则缩放会失效 */
 @keyframes lowSpeedSpin {
   0% {
     transform: translate(-50%, -50%) scale(var(--flower-scale)) rotate(0deg);
@@ -221,13 +241,9 @@ html.dark .sun-decoration {
     transform: translate(-50%, -50%) scale(var(--flower-scale)) rotate(360deg);
   }
 }
-
-/* 黑夜太阳移动到右侧 */
 html.dark .theme-toggle__sun {
   transform: translateX(calc(var(--toggle-width) - var(--sun-diameter) - var(--sun-offset)));
 }
-
-/* **修复核心：月亮遮罩** */
 .theme-toggle__moon-mask {
   position: absolute; /* **必须是绝对定位，才能相对于太阳对齐** */
   top: 0;             /* **强制顶端对齐** */
@@ -246,13 +262,9 @@ html.dark .theme-toggle__sun {
     0.062em 0.062em 0.062em 0em rgba(254, 255, 239, 0.61) inset,
     0em -0.062em 0.062em 0em #969696 inset;
 }
-
-/* **黑夜月亮归位，完全覆盖太阳** */
 html.dark .theme-toggle__moon-mask {
   transform: translateX(0);
 }
-
-/* 陨石坑 */
 .theme-toggle__crater {
   position: absolute;
   background-color: var(--color-crater);
@@ -273,7 +285,6 @@ html.dark .theme-toggle__moon-mask {
   top: 0.5em;
   width: 2.75em;
   color: var(--color-star);
-  /* 白天藏在天花板上面 */
   transform: translateY(-2.5em); 
   transition: transform var(--transition-standard);
 }
@@ -287,19 +298,13 @@ html.dark .theme-toggle__moon-mask {
   box-shadow: 0.8em 0.7em 0 -0.1em rgba(255, 255, 255, 0.7);
   transform: rotate(-45deg);
 }
-
-/* 核心逻辑：白天显示，黑夜滑出 */
 html.dark .theme-toggle__flower {
   transform: translateX(-2em); /* 向左滑出隐藏 */
   opacity: 0;
 }
-
-/* 黑夜降落 */
 html.dark .theme-toggle__stars {
   transform: translateY(0);
 }
-
-/* 云朵 (巧妙的单 div + 多重 box-shadow 构造) */
 .theme-toggle__clouds {
   position: absolute;
   left: 0.8em;
@@ -329,8 +334,6 @@ html.dark .theme-toggle__stars {
   transform: translateY(0); 
   transition: transform var(--transition-standard);
 }
-
-/* 黑夜沉入地板以下消失 */
 html.dark .theme-toggle__clouds {
   transform: translateY(3em);
 }
@@ -359,16 +362,16 @@ html.dark .theme-toggle__clouds {
   box-shadow: 0 1em 3em rgba(0, 0, 0, 0.15);
   border: 1px solid rgba(255,255,255,0.3);
   transition: all 0.3s ease;
-}
+  transform: translateY(100px); 
+  opacity: 0;
 
-/* 暗色模式适配 */
+  transition: opacity 0.5 ease,background var(--transition-standard);
+}
 html.dark .player-left-bottom {
   background: var(--player-bg-dark);
   color: #eee;
   border: 1px solid rgba(255,255,255,0.1);
 }
-
-/* 黑胶唱片：尺寸全部使用 em */
 .album {
   height: 14em; 
   width: 14em;
@@ -383,10 +386,8 @@ html.dark .player-left-bottom {
   cursor: grab;
   border: 0.4em solid #222;
 }
-
 .album img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
 
-/* 内部间距与文字 */
 .songContainer {
   flex: 1;
   display: flex;
@@ -401,12 +402,15 @@ html.dark .player-left-bottom {
 
 /* 进度条 */
 .seekBar {
-  width: 100%;
-  height: 0.3em;
-  background: rgba(0,0,0,0.1);
-  border-radius: 0.2em;
-  margin-top: 1em;
-}
+    width: 100%;
+    height: 0.6em; 
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 1em; /* 保持圆角 */
+    margin-top: 1em;
+    cursor: pointer;
+    position: relative;
+    transition: background var(--transition-standard);
+  }
 html.dark .seekBar { background: rgba(255,255,255,0.1); }
 
 .seekProgress {
@@ -430,14 +434,10 @@ html.dark .seekBar { background: rgba(255,255,255,0.1); }
 }
 
 #volumeSlider {
-  /* 使用变量控制长度 */
   width: var(--volume-bar-width); 
-  
   height: 0.3em;
   cursor: pointer;
-  accent-color: var(--player-accent); /* 进度条填充色 */
-  
-  /* 去除默认外观，使其更精致 */
+  accent-color: var(--player-accent); 
   appearance: none;
   -webkit-appearance: none;
   background: rgba(0, 0, 0, 0.1);
@@ -445,12 +445,9 @@ html.dark .seekBar { background: rgba(255,255,255,0.1); }
   outline: none;
 }
 
-/* 暗色模式下的背景 */
 html.dark #volumeSlider {
   background: rgba(255, 255, 255, 0.2);
 }
-
-/* 针对 Chrome 的滑块小圆点样式 (可选) */
 #volumeSlider::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 0.8em;
@@ -466,3 +463,294 @@ html.dark #volumeSlider {
 .control-btn:hover { scale: 1.1; }
 
 .volume-box input { width: 5em; height: 0.3em; accent-color: var(--player-accent); }
+/* ============================================================
+   新增：加载遮罩层样式
+   ============================================================ */
+#loader-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;            /* 开启 Flex 布局 */
+    justify-content: center;   /* 水平居中 */
+    align-items: center;       /* 垂直居中 */
+    background: var(--bg-color);
+    z-index: 99999;
+    transition: opacity 0.8s ease, visibility 0.8s
+}
+
+.loader-content {
+    display: flex;
+    flex-direction: column;    /* 让圆环和文字上下排列 */
+    align-items: center;       /* 确保子元素水平对齐 */
+    justify-content: center;
+}
+/* 旋转转圈 */
+.spinner-wrapper {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin-bottom: 30px;
+}
+
+.spinner {
+    position: absolute;
+    inset: 0;
+    border: 2px solid transparent;
+    border-top-color: var(--player-accent);
+    border-bottom-color: var(--player-accent);
+    border-radius: 50%;
+    animation: spin 2s linear infinite;
+    opacity: 0.6;
+}
+.spinner-inner {
+    position: absolute;
+    inset: 15px;
+    border: 2px solid transparent;
+    border-left-color: var(--player-accent);
+    border-right-color: var(--player-accent);
+    border-radius: 50%;
+    animation: spin-reverse 1.2s linear infinite;
+}
+#enter-text {
+    font-family: var(--font-main);
+    color: var(--player-accent);
+    font-size: 1.2rem;
+    letter-spacing: 0.6em; /* 更有意境 */
+    padding-left: 0.6em; /* 抵消字间距带来的偏移 */
+    cursor: pointer;
+    animation: textPulse 2s ease-in-out infinite;
+    text-shadow: 0 0 10px rgba(var(--current-star-rgb), 0.3);
+    width: 100%;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+@keyframes spin-reverse {
+    to { transform: rotate(-360deg); }
+}
+@keyframes textPulse {
+    0%, 100% { opacity: 0.4; transform: scale(0.96); }
+    50% { opacity: 1; transform: scale(1); }
+}
+
+.fade-out {
+    opacity: 0 !important;
+    pointer-events: none;
+}
+
+
+/*====================================================== 
+  星空背景容器 
+========================================================*/
+
+#star-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* 底层：白天背景 */
+    background: radial-gradient(ellipse at bottom, #e6f4f1 0%, #d8efe3 100%);
+    z-index: -1;
+    overflow: hidden;
+}
+
+#star-background::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+    z-index: -1;
+}
+html.dark #star-background::before {
+    opacity: 1;
+}
+/* 星星基础样式 */
+#stars, #stars2, #stars3 {
+  background: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  animation: animStarDown var(--star-speed-small) linear infinite;
+}
+#stars, #stars2, #stars3, #star-flicker-layer {
+  transition: none !important; 
+}
+#stars { width: 1px; height: 1px; animation-duration: 100s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite; }
+#stars2 { width: 2px; height: 2px; animation-duration: 100s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite; }
+#stars3 { width: 3px; height: 3px; animation-duration: 100s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite; }
+
+#stars::after, #stars2::after, #stars3::after {
+    content: " ";
+    position: absolute;
+    top: calc(var(--star-move-y) * -1); 
+    width: inherit;
+    height: inherit;
+    background: transparent;
+    box-shadow: inherit;
+}
+@keyframes starBlink {
+  0% { opacity: 1; }
+  30% { opacity: 0; } /* 快速消失 */
+  70% { opacity: 0; } /* 保持 1s 左右的空白 */
+  100% { opacity: 1; } /* 缓慢出现 */
+}
+.stars-flicker-active {
+  animation: starBlink 1.0s ease-in-out forwards;
+}
+@keyframes animStarDown {
+  from { transform: translateY(-2000px); }
+  to { transform: translateY(0); }
+}
+@keyframes animStarUp {
+  from { transform: translateY(0); }
+  to { transform: translateY(-2000px); }
+}
+#stars::after, #stars2::after, #stars3::after {
+  content: " ";
+  position: absolute;
+  top: 2000px; 
+  width: inherit;
+  height: inherit;
+  background: transparent;
+  box-shadow: inherit;
+}
+#stars::before, #stars2::before, #stars3::before {
+  content: " ";
+  position: absolute;
+  top: -2000px; 
+  width: inherit;
+  height: inherit;
+  background: transparent;
+  box-shadow: inherit;
+}
+.content-fading {
+    opacity: 0;
+    transform: translateY(5px);
+}
+#hero-title, #hero-tagline, #hero-motto, #main-photo, [id^="card-about-"] {  
+  transition: opacity 0.4s ease-in-out, transform 0.4s ease-out;
+  white-space: pre-wrap;
+  line-height: 1.6;
+  margin-top: 0.5rem;
+}
+#songName, #artists
+{
+  transition: opacity 0.4s ease-in-out, transform 0.4s ease-out;
+}
+#songName.content-fading, #artists.content-fading {
+    opacity: 0 !important;
+    transform: translateY(5px);
+}
+.gallery-grid {
+    display: grid;
+    /* 核心：扩大间距，1.8rem 约 28px，让星空背景透出更多，更有设计感 */
+    gap: 1.8rem; 
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+}
+@media (min-width: 768px) {
+    .gallery-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+.gallery-item {
+    width: 100%;
+    aspect-ratio: 1 / 1; 
+    object-fit: cover; /* 保证图片填充不留白、不拉伸 */
+    
+    border-radius: 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    /* 保持原有的丝滑动画 */
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: zoom-in;
+}
+.gallery-item:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+}
+.hidden {
+    display: none !important;
+}
+/*======================================================= 
+图片查看器
+=========================================================*/
+#image-viewer {
+    position: fixed;
+    z-index: 30000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px); 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: zoom-out;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* 当显示时的状态 */
+#image-viewer.active {
+    opacity: 1;
+    display: flex ;
+}
+
+/* 查看器内部大图 */
+.viewer-content {
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 8px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+#image-viewer.active .viewer-content {
+    transform: scale(1);
+}
+
+/* 关闭按钮 */
+.close-viewer {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* 针对图库内图片的悬停放大效果 */
+.gallery-grid img {
+    /* 基础状态 */
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                box-shadow 0.4s ease,
+                border-color 0.4s ease;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+/* 鼠标移上去时的状态 */
+.gallery-grid img:hover {
+    transform: scale(1.05); 
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    border-color: var(--player-accent); 
+    z-index: 20;
+    position: relative;
+}
